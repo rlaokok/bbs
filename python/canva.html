@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  
+  <META http-equiv="Pragma" content="no-cache"/>
+  <META http-equiv="Expires" content="0"/>
+   <META http-equiv="Cache-Control" content="no-cache"/>
+
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width" , initial-scale="1">
+ <!-- <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
+ <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet"> -->
+
+ <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+ <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+ <script src="{{ url_for('static', filename='js/bootstrap.js') }}" > </script>
+ 
+ 
+</head>
+
+<style>
+  body{
+    margin: 0;
+    padding: 0;
+  }
+  .custom_navbar{
+    background-color: #f8f8f8;
+    height: 50px;
+    width: 100%;
+    border-bottom: 1px solid rgb(219, 219, 219);
+  }
+  #main-menu, #sub-menu{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+  #main-menu > li{
+    float:left;
+  }
+  #main-menu > li > a{
+    display: block;
+    padding: 11px 16px;
+    text-align: center;
+    text-decoration: none;
+    color : rgb(130, 130, 130); 
+  }
+  #sub-menu{
+    opacity: 0;
+    visibility: hidden;
+    border: solid 1px black;
+    background-color: white;
+    height: 70px;
+    position:absolute;
+  }
+  #sub-menu >li > a{
+    text-decoration: none;
+    color : rgb(130, 130, 130);
+  }
+  #main-menu > li:hover #sub-menu{
+    opacity: 1;
+    visibility: visible;
+  }
+  #menu-home{
+    font-size: 1.25rem;
+  }
+  #menu-main{
+    font-size: 0.95rem;
+    margin: 4px 0 0 0;
+  }
+  .container{
+    width: 100%;
+    padding-right: var(--bs-gutter-x, 0.75rem);
+    padding-left: var(--bs-gutter-x, 0.75rem);
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+  }
+</style>
+<title>머신러닝(손글씨)</title>
+<body>
+  <nav class="custom_navbar">
+    <div class="custom_navbar_box">
+      <ul id="main-menu">
+        <li><a id='menu-home' href="http://rlaokok.iptime.org:8089/MYHOME/main.jsp">HOME</a></li>
+        <li><a id="menu-main" href="http://rlaokok.iptime.org:8089/MYHOME/main.jsp">메인</a></li>
+        <li><a id="menu-main" href="http://rlaokok.iptime.org:8089/MYHOME/bbs.jsp">게시판</a></li>
+        <li><a id="menu-main">Python▼</a>
+          <ul id="sub-menu">
+            <li><a href="selenium">웹 크롤링</a></li>
+            <li><a href="canvas">머신러닝(손글씨)</a></li>
+            <li><a href="r_learning">강화 학습(게임)</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+<div class="container">
+  <h1>Machine Learning</h1>
+  <h4>※ 모델을 불러오는 시간이 다소 걸릴 수 있습니다.</h4>
+  <h4>현재 가, 각, 간, 갇, 갈, 갉, 갊, 감, 갑, 값</h4>
+  <h4>나, 다, 라, 마, 바, 사, 아, 자, 차, 카, 타, 파, 하의 손글씨 모델적용중입니다.</h4>
+  <h2>↓↓↓↓이곳에 테스트로 적어주세요↓↓↓↓</h2>
+  <canvas id="main" width="500" height="500" style="border: 1px solid red;"></canvas><br>
+  
+  <button id="clearBtn" type="button" onclick="clearBtn()">지우기</button>
+  <button id="saveBtn" type="button" onclick="saveBtn()">확인</button>
+  <input type="text" id='textBox' value="적으신 글자가 ''   '' 인가요?">
+</div>
+
+
+
+
+
+ <script>
+  var iX, iY;
+  var bDraw = false;
+  
+  var canvas = document.getElementById("main");
+  var ctx = canvas.getContext("2d");
+  var bb = canvas.getBoundingClientRect();
+  ctx.strokeStyle = "#000000";
+  ctx.lineJoin = "round";
+  ctx.lineWidth = 20;
+  ctx.fillStyle = '#ffffff'; 
+  var filter = "win16|win32|win64|mac|macintel"; 
+
+if ( navigator.platform ) { 
+  if ( filter.indexOf( navigator.platform.toLowerCase() ) < 0 ) { 
+    // alert('mobile 접속'); 
+    // function touchStart(e){
+    //   this.ctx.beginPath();
+    //   this.ctx.moveTo(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
+    // }
+    // function touchMove(e){
+    //   e.preventDefault();
+    //   this.touchDessiner(e.changedTouches[0].pageX, e.changedTouches[0].pageY)
+    // }
+    // function touchDessiner(x, y){
+    //   this.ctx.lineWidth = 2;
+    //   this.ctx.strokeStyle = "#000";
+    //   this.ctx.lineTo(x, y);
+    //   this.ctx.stroke();
+    // }
+    // window.addEventListener("touchstart", touchStart);
+    // window.addEventListener("touchmove", touchMove);
+      
+  } else { 
+    //alert('pc 접속'); 
+    // 마우스 down 시 그리기 시작으로 설정한다.
+  $('#main').mousedown(function(e){
+   iX = e.clientX - bb.left;
+   iY = e.clientY - bb.top;
+   bDraw = true;
+  });
+  
+
+  // 그리기 시작 상태에서 마우스를 이동하면 마우스 이동 경로를 따라서 선을 그려준다.
+  $('#main').mousemove(function(e){
+   if( bDraw )
+   {
+    var iNewX = e.clientX - bb.left;
+    var iNewY = e.clientY - bb.top;
+   
+    ctx.beginPath();
+    ctx.moveTo( iX, iY );
+    ctx.lineTo( iNewX, iNewY );
+    ctx.closePath();
+    ctx.stroke();
+   
+    iX = iNewX;
+    iY = iNewY;
+   }
+  });
+  
+  $('#main').mouseup(function(e){
+   bDraw = false;
+  });
+
+  function clearBtn(){
+    var canvas = document.getElementById("main");
+    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+  }
+
+  function saveBtn(){
+    var canvas = document.getElementById("main");
+    var snapshotPNG = canvas.toDataURL('image/png');
+    $.ajax({
+        url: '/canvas/save',
+        method: "post",
+        dataType: "json",
+        //processData : false,	// data 파라미터 강제 string 변환 방지!!
+        //contentType : false,	// application/x-www-form-urlencoded; 방지!!
+        data: {'data' : snapshotPNG},
+        success: function(data){
+            //canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            document.getElementById("textBox").value = "적으신 글자가 \""+data['data']+"\" 인가요?";
+        },
+        error: function (request, status, error){
+            alert('형식 잘못됨');
+        }
+        });
+    }
+    } 
+};
+ </script>
+
+
+
+</body>
+</html>
